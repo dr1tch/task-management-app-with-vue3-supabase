@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { userSession } from "./helpers/use-auth";
+import Login from "./pages/Login.vue";
+// import Register from "./pages/Register.vue";
+import Tasks from "./pages/Tasks.vue";
 </script>
 
 <template>
-  <div
-    class="w-full flex justify-center items-center align-middle min-h-screen"
-  >
-    <div class="w-full max-w-2xl flex flex-col gap-8 items-start">
-      <HelloWorld msg="Vite + Vue" />
+  <div class="w-full h-full min-h-screen bg-gray-950 text-white">
+    <div
+      v-if="userSession.session === null"
+      class="w-full h-full flex flex-col justify-center items-center p-4"
+    >
+      <Login />
+    </div>
+    <div v-else class="w-full min-h-screen">
+      <Suspense>
+        <template #default>
+          <div class="min-h-screen h-full">
+            <Tasks />
+          </div>
+        </template>
+        <template #fallback>
+          <Loading />
+        </template>
+      </Suspense>
     </div>
   </div>
 </template>

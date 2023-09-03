@@ -1,5 +1,13 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from "vue";
+import "./style.css";
+import App from "./App.vue";
 
-createApp(App).mount('#app')
+import { supabase } from "./lib/supabase-client";
+import { userSession } from "./helpers/use-auth";
+
+createApp(App).mount("#app");
+
+supabase.auth.onAuthStateChange((_, session) => {
+  userSession.value.session = session;
+});
+
