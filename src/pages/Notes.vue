@@ -5,9 +5,9 @@
       <ul class="flex flex-col items-start gap-4">
         <Todo v-for="todo in folderTodos" :todo="todo" :key="todo.id" />
       </ul>
-      <!-- <button class="btn-black w-full mt-12" @click="handleLogout">
+      <button class="btn-black w-full mt-12" @click="handleLogout">
         Logout
-      </button> -->
+      </button>
     </div>
   </div>
 </template>
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { ref, provide, watchEffect } from "vue";
 import Sidebar from "../components/Sidebar.vue";
+import { handleLogout } from "../helpers/use-auth";
 import { Folder } from "../types/folders";
 import { getTodosByFolderId, allTodos } from "../helpers/use-tasks";
 import { Todo as TTodo } from "../types/todo";

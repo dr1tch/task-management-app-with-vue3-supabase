@@ -1,4 +1,4 @@
-import { Session, User } from "@supabase/supabase-js";
+import { AuthError, Session, User } from "@supabase/supabase-js";
 import { ref } from "vue";
 import { supabase } from "../lib/supabase-client";
 
@@ -9,51 +9,65 @@ export const userSession = ref<{
   session: null,
   user: null,
 });
-
+export type TAuthError = { name: string; message: string };
 export async function handleLogin(credentials: Credentials) {
+  let errors: TAuthError | null = null;
+  let isSuccess = false;
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: credentials.email,
       password: credentials.password,
     });
     if (error) {
-      alert("Error logging in: " + error.message);
+      errors = {
+        name: error.name,
+        message: error.message,
+      };
     }
     // No error throw, but no user detected so send magic link
     if (!error && !data) {
       alert("Check your email for the login link!");
     }
 
-    if (data !== null) userSession.value = data;
+    if (data !== null) {
+      userSession.value = data;
+      isSuccess = true;
+    }
   } catch (error) {
     console.error("Error thrown:", (error as any).message);
-    alert((error as any).error_description || error);
+    // alert((error as any).error_description || error);
+    errors = {
+      name: (error as any).error,
+      message: (error as any).error_description,
+    };
   }
+  return { errors, isSuccess };
 }
 
 /*
  * Handles signup provided a valid credentials object.
  */
 export async function handleSignup(credentials: Credentials) {
+  let errors: TAuthError | null = null;
+  let isSuccess = false;
   try {
     const { email, password } = credentials;
-    // prompt user if they have not filled populated their credentials
-    if (!email || !password) {
-      alert("Please provide both your email and password.");
-      return;
-    }
     const { error, data } = await supabase.auth.signUp({ email, password });
     if (error) {
-      alert(error.message);
-      console.error(error, error.message);
-      return;
+      errors = {
+        name: error.name,
+        message: error.message,
+      };
     }
     if (data !== null) userSession.value = data;
-    alert("Signup successful, confirmation mail should be sent soon!");
-  } catch (err) {
-    alert("Fatal error signing up");
-    console.error("signup error", err);
+    isSuccess = true;
+  } catch (error) {
+    errors = {
+      name: (error as any).error,
+      message: (error as any).error_description,
+    };
   }
+  return { errors, isSuccess };
 }
 
 export async function handleLogout() {
@@ -67,11 +81,11 @@ export async function handleLogout() {
       return;
     }
 
-    alert("You have signed out!");
     userSession.value = {
       user: null,
       session: null,
     };
+    window.location.assign("/login");
   } catch (err) {
     alert("Unknown error signing out");
     console.error("Error", err);

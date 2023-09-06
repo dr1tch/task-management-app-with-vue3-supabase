@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { userSession } from "./helpers/use-auth";
-import Login from "./pages/Login.vue";
+// import { userSession } from "./helpers/use-auth";
+// import Login from "./pages/Login.vue";
 // import Register from "./pages/Register.vue";
-import Tasks from "./pages/Tasks.vue";
+// import Tasks from "./pages/Tasks.vue";
 </script>
 
 <template>
-  <div class="w-full h-full min-h-screen bg-gray-950 text-white">
-    <div
+  <div class="w-full h-full min-h-screen text-white">
+    <router-view />
+    <!-- <div
       v-if="userSession.session === null"
-      class="w-full h-full flex flex-col justify-center items-center p-4"
+      class="w-full min-h-screen flex flex-col justify-center items-center p-4"
     >
       <Login />
     </div>
@@ -24,7 +25,7 @@ import Tasks from "./pages/Tasks.vue";
           <Loading />
         </template>
       </Suspense>
-    </div>
+    </div> -->
   </div>
 </template>
 

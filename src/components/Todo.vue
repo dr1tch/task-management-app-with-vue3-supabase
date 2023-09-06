@@ -4,7 +4,7 @@
       type="checkbox"
       class="accent-emerald-700"
       :checked="props.todo.is_complete || false"
-      @change="(e) => handleComplete(e)"
+      @change="(e: any) => handleComplete(e.target.value)"
     />
     <div>
       <h1 class="text-2xl font-bold -mt-2">{{ props.todo.title }}</h1>
