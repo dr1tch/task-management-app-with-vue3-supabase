@@ -7,7 +7,7 @@ import NotFound from "../pages/NotFound.vue";
 
 import { userSession } from "../helpers/use-auth";
 
-const requireAuth = (to: any, from: any, next: any) => {
+const requireAuth = (next: any) => {
   if (userSession.value.session === null) {
     next("/login"); // Redirect to login page if not authenticated
   } else {

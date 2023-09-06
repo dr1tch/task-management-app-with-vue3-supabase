@@ -1,4 +1,4 @@
-import { AuthError, Session, User } from "@supabase/supabase-js";
+import { Session, User } from "@supabase/supabase-js";
 import { ref } from "vue";
 import { supabase } from "../lib/supabase-client";
 
